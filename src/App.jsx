@@ -11,23 +11,24 @@ class App extends Component {
   state = {
     contacts: [],
     name: '',
+    number: '',
   };
 
-  handleNameChange = event => {
-    const { value } = event.currentTarget;
+  handleChange = event => {
+    const { name, value } = event.currentTarget;
 
-    this.setState({ name: value });
+    this.setState({ [name]: value });
   };
 
   handleSubmit = event => {
     event.preventDefault();
 
-    this.state.contacts.push(this.state.name);
+    this.state.contacts.push({ [this.state.name]: this.state.number });
     this.reset();
   };
 
   reset = () => {
-    this.setState({ name: '' });
+    this.setState({ name: '', number: '' });
   };
 
   render() {
@@ -44,16 +45,27 @@ class App extends Component {
               title="Имя может состоять только из букв, апострофа, тире и пробелов. Например Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan и т. п."
               required
               value={this.state.name}
-              onChange={this.handleNameChange}
+              onChange={this.handleChange}
             />
-            <button type="submit">Add contact</button>
           </label>
+          <label>
+            <input
+              type="tel"
+              name="number"
+              pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
+              title="Номер телефона должен состоять цифр и может содержать пробелы, тире, круглые скобки и может начинаться с +"
+              required
+              value={this.state.number}
+              onChange={this.handleChange}
+            />
+          </label>
+          <button type="submit">Add contact</button>
         </form>
         <h2>Contacts</h2>
         <ul>
           {this.state.contacts.map(contact => (
             <li name={contact.name} id={v4()} key={v4()}>
-              {contact}
+              {Object.keys(contact)}: {Object.values(contact)}
             </li>
           ))}
         </ul>
