@@ -1,8 +1,3 @@
-// 1. У input value привязать к state.name
-// 2. Создать метод обновления состояния инпута
-// 3. Привязать изменение state.name к изменению input
-// 4. Получить телефон number, создать еще один label
-
 import { Component } from 'react';
 import { v4 } from 'uuid';
 import './App.css';
@@ -12,6 +7,7 @@ class App extends Component {
     contacts: [],
     name: '',
     number: '',
+    filter: '',
   };
 
   handleChange = event => {
@@ -23,8 +19,16 @@ class App extends Component {
   handleSubmit = event => {
     event.preventDefault();
 
-    this.state.contacts.push({ [this.state.name]: this.state.number });
+    this.state.contacts.push({
+      name: this.state.name,
+      number: this.state.number,
+    });
+
     this.reset();
+  };
+
+  changeFilter = event => {
+    this.setState({ filter: event.currentTarget.value });
   };
 
   reset = () => {
@@ -32,6 +36,12 @@ class App extends Component {
   };
 
   render() {
+    const normalizedFilter = this.state.filter.toLowerCase();
+
+    const visibleContacts = this.state.contacts.filter(contact =>
+      contact.name.toLowerCase().includes(normalizedFilter),
+    );
+
     return (
       <>
         <h1>Phonebook</h1>
@@ -62,10 +72,16 @@ class App extends Component {
           <button type="submit">Add contact</button>
         </form>
         <h2>Contacts</h2>
+        <p>Find contacts by name</p>
+        <input
+          type="text"
+          value={this.state.filter}
+          onChange={this.changeFilter}
+        />
         <ul>
-          {this.state.contacts.map(contact => (
-            <li name={contact.name} id={v4()} key={v4()}>
-              {Object.keys(contact)}: {Object.values(contact)}
+          {visibleContacts.map(contact => (
+            <li name={contact.name} id={contact.id} key={v4()}>
+              {contact.name}: {contact.number}
             </li>
           ))}
         </ul>
