@@ -1,9 +1,10 @@
 import { Component } from 'react';
 import { v4 } from 'uuid';
+
+import Container from './components/Container';
 import ContactForm from './components/ContactForm';
-import Filter from './components/Filter';
 import ContactList from './components/ContactList';
-import './App.css';
+import Filter from './components/Filter';
 
 class App extends Component {
   state = {
@@ -52,17 +53,16 @@ class App extends Component {
     );
 
     return (
-      <>
+      <Container>
         <h1>Phonebook</h1>
         <ContactForm onSubmit={formSubmitHandler} />
         <h2>Contacts</h2>
         <Filter value={filter} onChange={changeFilter} />
         <ContactList
           contacts={visibleContacts}
-          id={v4()}
           onDeleteContact={deleteContact}
         />
-      </>
+      </Container>
     );
   }
 }
