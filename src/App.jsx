@@ -37,10 +37,11 @@ class App extends Component {
       )
     ) {
       alert(`${name} is already in contacts`);
+    } else {
+      this.setState(({ contacts }) => ({
+        contacts: [contact, ...contacts],
+      }));
     }
-    this.setState(({ contacts }) => ({
-      contacts: [contact, ...contacts],
-    }));
   };
 
   render() {
